@@ -1,8 +1,19 @@
+import styled from "styled-components";
+import GlobalStyle from "./styles/GlobalStyle";
+
 function App() {
+  const Button = styled.button`
+    background: yellow;
+    padding: 8px 16px;
+    border-radius: 4px;
+  `;
   return (
-    <div>
-      <h1>Hello Hub</h1>
-    </div>
+    <>
+      <GlobalStyle />
+      <div>
+        <Button>Hello Hub</Button>
+      </div>
+    </>
   );
 }
 
