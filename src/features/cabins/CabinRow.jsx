@@ -67,10 +67,11 @@ function CabinRow({ cabin }) {
     onError: (error) => toast.error(error.message),
   });
 
+  console.log(name, image);
+
   return (
     <TableRow role="row">
-      {/* REMEMBER TO CHANGE THIS BACK TO image && <Img src={image} alt={name} /> WHEN YOU HAVE A CABIN IMAGE */}
-      {image && <Img src={image} alt={name} />}
+      <Img src={image} alt={name} />
       <Cabin>{name}</Cabin>
       <div>{maxCapacity} Guests</div>
       <Price>{formatCurrency(regularPrice)}</Price>
