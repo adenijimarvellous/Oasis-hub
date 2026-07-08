@@ -9,22 +9,17 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 
-import { createEditCabin } from "../../services/apiCabins";
+import { createCabin } from "../../services/apiCabins";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
-  const { id: editId, ...editValues } = cabinToEdit;
-  const isEditMode = Boolean(editId);
-
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: isEditMode ? editValues : {},
-  });
+function CreateCabinForm() {
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
 
   const { errors } = formState;
 
   const queryClient = useQueryClient();
 
-  const { mutate: createCabin, isLoading: isCreating } = useMutation({
-    mutationFn: createEditCabin,
+  const { mutate, isLoading: isCreating } = useMutation({
+    mutationFn: createCabin,
     onSuccess: () => {
       toast.success("New cabin created successfully");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
@@ -34,33 +29,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       toast.error(error.message || "Cabin could not be created"),
   });
 
-  const { mutate: editCabin, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
-    onSuccess: () => {
-      toast.success("Cabin updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["cabins"] });
-      reset();
-    },
-    onError: (error) =>
-      toast.error(error.message || "Cabin could not be updated"),
-  });
-
-  const isWorking = isCreating || isEditing;
-
   function onSubmit(data) {
-    const image = typeof data.image === "string" ? data.image : data.image[0];
-
-    if (isEditMode) {
-      editCabin({
-        newCabinData: { ...data, image },
-        id: editId,
-      });
-    } else {
-      createCabin({
-        ...data,
-        image,
-      });
-    }
+    console.log(data.image);
+    console.log(typeof data.image);
+    mutate({ ...data, image: data.image[0] });
   }
 
   function onError(errors) {
@@ -73,7 +45,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="text"
           id="name"
-          disabled={isWorking}
+          disabled={isCreating}
           {...register("name", { required: "This field is required" })}
         />
       </FormRow>
@@ -82,7 +54,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="maxCapacity"
-          disabled={isWorking}
+          disabled={isCreating}
           {...register("maxCapacity", {
             required: "This field is required",
             min: {
@@ -97,7 +69,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         <Input
           type="number"
           id="regularPrice"
-          disabled={isWorking}
+          disabled={isCreating}
           {...register("regularPrice", {
             required: "This field is required",
             min: {
@@ -113,7 +85,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           type="number"
           id="discount"
           defaultValue={0}
-          disabled={isWorking}
+          disabled={isCreating}
           {...register("discount", {
             required: "Can't be empty, make it at least 0",
             validate: (value) =>
@@ -131,7 +103,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           type="text"
           id="description"
           defaultValue=""
-          disabled={isWorking}
+          disabled={isCreating}
           {...register("description", { required: "This field is required" })}
         />
       </FormRow>
@@ -141,29 +113,22 @@ function CreateCabinForm({ cabinToEdit = {} }) {
           id="image"
           accept="image/*"
           type="file"
-          {...register("image", {
-            required: isEditMode ? false : "This field is required",
-          })}
+          {...register("image", { required: "This field is required" })}
         />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button
-          $variation="secondary"
-          $size="small"
-          type="reset"
-          disabled={isWorking}
-        >
+        <Button $variation="secondary" $size="small" type="reset">
           Cancel
         </Button>
         <Button
           $variation="primary"
           $size="small"
           type="submit"
-          disabled={isWorking}
+          disabled={isCreating}
         >
-          {isEditMode ? "Edit cabin" : "Create cabin"}
+          Create cabin
         </Button>
       </FormRow>
     </Form>
