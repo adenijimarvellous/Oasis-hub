@@ -4,13 +4,14 @@ import Input from "../../ui/Input";
 import FormRow from "../../ui/FormRow";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
+import ButtonGroup from "../../ui/ButtonGroup";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditMode = Boolean(editId);
 
@@ -36,6 +37,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         },
       );
@@ -48,6 +50,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         {
           onSuccess: () => {
             reset();
+            onCloseModal?.();
           },
         },
       );
@@ -59,7 +62,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      $type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -139,23 +145,26 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        {/* type is an HTML attribute! */}
-        <Button
-          $variation="secondary"
-          $size="small"
-          type="reset"
-          disabled={isWorking}
-        >
-          Cancel
-        </Button>
-        <Button
-          $variation="primary"
-          $size="small"
-          type="submit"
-          disabled={isWorking}
-        >
-          {isEditMode ? "Edit cabin" : "Create cabin"}
-        </Button>
+        <ButtonGroup>
+          {/* type is an HTML attribute! */}
+          <Button
+            $variation="secondary"
+            $size="small"
+            type="reset"
+            disabled={isWorking}
+            onClick={() => onCloseModal?.()}
+          >
+            Cancel
+          </Button>
+          <Button
+            $variation="primary"
+            $size="small"
+            type="submit"
+            disabled={isWorking}
+          >
+            {isEditMode ? "Edit cabin" : "Create cabin"}
+          </Button>
+        </ButtonGroup>
       </FormRow>
     </Form>
   );
