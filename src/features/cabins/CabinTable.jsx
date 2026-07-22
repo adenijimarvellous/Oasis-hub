@@ -5,6 +5,7 @@ import { useCabins } from "./useCabins";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
+import Empty from "../../ui/Empty";
 
 // const Table = styled.div`
 //   width: 100%;
@@ -37,6 +38,9 @@ function CabinTable() {
 
   if (isLoading) {
     return <Spinner />;
+  }
+  if (!cabins.length) {
+    return <Empty resourceName="cabins" />;
   }
 
   //1. FILTER
