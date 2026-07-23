@@ -2,7 +2,7 @@ import { useState } from "react";
 import { isFuture, isPast, isToday } from "date-fns";
 import supabase from "../services/supabase";
 import Button from "../ui/Button";
-import { subtractDates } from "../starter/utils/helpers";
+import { subtractDates } from "../utils/helpers";
 
 import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
@@ -88,7 +88,7 @@ async function createBookings() {
       cabinPrice,
       extrasPrice,
       totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
+      guestsId: allGuestIds.at(booking.guestsId - 1),
       cabinId: allCabinIds.at(booking.cabinId - 1),
       status,
     };
