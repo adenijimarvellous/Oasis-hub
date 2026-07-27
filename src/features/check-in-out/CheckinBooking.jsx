@@ -35,6 +35,7 @@ function CheckinBooking() {
       setConfirmPaid(booking.isPaid);
     }
   }, [booking]);
+
   const moveBack = useMoveBack();
   const { checkin, isCheckingIn } = useCheckin();
 
