@@ -25,7 +25,7 @@ const Heading = styled.h1`
     css`
       font-size: 2rem;
       font-weight: 500;
-      text-align: center;
+      /* text-align: center; */
     `}
     
   line-height: 1.4;
