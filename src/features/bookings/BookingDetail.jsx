@@ -59,8 +59,8 @@ function BookingDetail() {
       <ButtonGroup>
         {status === "unconfirmed" && (
           <Button
-            $type="secondary"
             $size="medium"
+            $variation="secondary"
             onClick={() => navigate(`/checkin/${bookingId}`)}
           >
             Check in
@@ -69,8 +69,8 @@ function BookingDetail() {
 
         {status === "checked-in" && (
           <Button
-            $type="secondary"
             $size="medium"
+            $variation="secondary"
             icon={<HiArrowUpOnSquare />}
             onClick={() => checkout(bookingId)}
             disabled={isCheckingOut}
@@ -81,7 +81,7 @@ function BookingDetail() {
 
         <Modal>
           <Modal.Open opens="delete">
-            <Button $type="danger" $size="medium">
+            <Button $size="medium" $variation="danger">
               Delete cabin
             </Button>
           </Modal.Open>
@@ -97,7 +97,7 @@ function BookingDetail() {
           </Modal.Window>
         </Modal>
 
-        <Button $type="secondary" $size="medium" onClick={moveBack}>
+        <Button $size="medium" $variation="secondary" onClick={moveBack}>
           Back
         </Button>
       </ButtonGroup>
