@@ -49,9 +49,16 @@ const variations = {
 };
 
 const Button = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  cursor: pointer;
 
   ${(props) => sizes[props.$size]}
   ${(props) => variations[props.$variation]}
