@@ -186,6 +186,23 @@ img {
   filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-grey-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-600);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-700);
+}
 /*
 FOR DARK MODE
 
