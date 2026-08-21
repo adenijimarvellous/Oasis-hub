@@ -5,7 +5,10 @@ import { createBooking as createBookingApi } from "../../services/apiBookings";
 export function useCreateBooking() {
     const queryClient = useQueryClient();
 
-    const { mutate: createBooking, isLoading: isCreating } = useMutation({
+    const {
+        mutate: createBooking,
+        isPending: isCreating,
+    } = useMutation({
         mutationFn: (newBooking) => createBookingApi(newBooking),
 
         onSuccess: () => {

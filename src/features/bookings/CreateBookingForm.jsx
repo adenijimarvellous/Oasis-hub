@@ -1,19 +1,61 @@
 import { useForm } from "react-hook-form";
+import { differenceInCalendarDays } from "date-fns";
+
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import SelectGuest from "../../ui/SelectGuest";
+
 import { useGuests } from "../guests/useGuests";
 import { useCabins } from "../cabins/useCabins";
+import { useCreateBooking } from "./useCreateBooking";
 
 function CreateBookingForm() {
   const { register, handleSubmit, reset } = useForm();
   const { guests, isLoading: isGuestsLoading } = useGuests();
   const { cabins, isLoading: isCabinsLoading } = useCabins();
+  const { createBooking, isCreating } = useCreateBooking();
 
   function onSubmit(data) {
-    console.log(data);
+    const numNights = differenceInCalendarDays(
+      new Date(data.endDate),
+      new Date(data.startDate),
+    );
+
+    const cabin = cabins.find((cabin) => cabin.id === Number(data.cabinId));
+
+    if (!cabin) return;
+
+    if (Number(data.numGuests) > cabin.maxCapacity) {
+      console.log("TOO MANY GUESTS");
+      return;
+    }
+
+    const cabinPrice = cabin.regularPrice * numNights;
+
+    const { guestId, cabinId, numGuests, startDate, endDate, observations } =
+      data;
+
+    const newBooking = {
+      guestsId: Number(guestId),
+      cabinId: Number(cabinId),
+      numGuests: Number(numGuests),
+      startDate,
+      endDate,
+      observations,
+      numNights,
+      cabinPrice,
+      extrasPrice: 0,
+      totalPrice: cabinPrice,
+      status: "unconfirmed",
+      hasBreakfast: false,
+      isPaid: false,
+    };
+
+    console.log("NEW BOOKING:", newBooking);
+
+    createBooking(newBooking);
   }
 
   return (
@@ -24,7 +66,7 @@ function CreateBookingForm() {
           {...register("guestId", {
             required: "Please select a guest",
           })}
-          disabled={isGuestsLoading}
+          disabled={isGuestsLoading || isCreating}
         >
           <option value="">Select a guest...</option>
 
@@ -42,7 +84,7 @@ function CreateBookingForm() {
           {...register("cabinId", {
             required: "Please select a cabin",
           })}
-          disabled={isCabinsLoading}
+          disabled={isCabinsLoading || isCreating}
         >
           <option value="">Select a cabin...</option>
 
@@ -65,11 +107,39 @@ function CreateBookingForm() {
               message: "There must be at least one guest",
             },
           })}
+          disabled={isCreating}
+        />
+      </FormRow>
+
+      <FormRow label="Start date">
+        <Input
+          type="date"
+          id="startDate"
+          {...register("startDate", {
+            required: "Please select a start date",
+          })}
+          disabled={isGuestsLoading}
+        />
+      </FormRow>
+
+      <FormRow label="End date">
+        <Input
+          type="date"
+          id="endDate"
+          {...register("endDate", {
+            required: "Please select an end date",
+          })}
+          disabled={isCreating}
         />
       </FormRow>
 
       <FormRow label="Observations">
-        <Input type="text" id="observations" {...register("observations")} />
+        <Input
+          type="text"
+          id="observations"
+          {...register("observations")}
+          disabled={isGuestsLoading}
+        />
       </FormRow>
 
       <FormRow>
@@ -78,12 +148,18 @@ function CreateBookingForm() {
           $size="medium"
           $variation="secondary"
           onClick={reset}
+          disabled={isCreating}
         >
           Cancel
         </Button>
 
-        <Button type="submit" $size="medium" $variation="primary">
-          Create booking
+        <Button
+          type="submit"
+          $size="medium"
+          $variation="primary"
+          disabled={isCreating}
+        >
+          {isCreating ? "Creating..." : "Create booking"}
         </Button>
       </FormRow>
     </Form>
