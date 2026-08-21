@@ -12,7 +12,7 @@ function AddBooking() {
       </Modal.Open>
 
       <Modal.Window name="booking-form">
-        <CreateBookingForm />
+        <CreateBookingForm onCloseModal={close} />
       </Modal.Window>
     </Modal>
   );

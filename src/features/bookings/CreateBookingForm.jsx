@@ -1,5 +1,6 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { differenceInCalendarDays } from "date-fns";
+import toast from "react-hot-toast";
 
 import Button from "../../ui/Button";
 import Form from "../../ui/Form";
@@ -10,12 +11,18 @@ import SelectGuest from "../../ui/SelectGuest";
 import { useGuests } from "../guests/useGuests";
 import { useCabins } from "../cabins/useCabins";
 import { useCreateBooking } from "./useCreateBooking";
+import { getToday } from "../../utils/helpers";
 
-function CreateBookingForm() {
-  const { register, handleSubmit, reset } = useForm();
+function CreateBookingForm({ onCloseModal }) {
+  const { register, handleSubmit, reset, control } = useForm();
   const { guests, isLoading: isGuestsLoading } = useGuests();
   const { cabins, isLoading: isCabinsLoading } = useCabins();
   const { createBooking, isCreating } = useCreateBooking();
+
+  const startDate = useWatch({
+    control,
+    name: "startDate",
+  });
 
   function onSubmit(data) {
     const numNights = differenceInCalendarDays(
@@ -27,8 +34,22 @@ function CreateBookingForm() {
 
     if (!cabin) return;
 
+    // Validate number of guests
     if (Number(data.numGuests) > cabin.maxCapacity) {
-      console.log("TOO MANY GUESTS");
+      toast.error(
+        `This cabin can accommodate a maximum of ${cabin.maxCapacity} guests.`,
+      );
+      return;
+    }
+
+    // Validate dates
+    if (new Date(data.startDate) < new Date(getToday())) {
+      toast.error("Start date cannot be in the past.");
+      return;
+    }
+
+    if (numNights <= 0) {
+      toast.error("End date must be after the start date.");
       return;
     }
 
@@ -53,9 +74,12 @@ function CreateBookingForm() {
       isPaid: false,
     };
 
-    console.log("NEW BOOKING:", newBooking);
-
-    createBooking(newBooking);
+    createBooking(newBooking, {
+      onSuccess: () => {
+        reset();
+        onCloseModal();
+      },
+    });
   }
 
   return (
@@ -115,6 +139,7 @@ function CreateBookingForm() {
         <Input
           type="date"
           id="startDate"
+          min={getToday()}
           {...register("startDate", {
             required: "Please select a start date",
           })}
@@ -126,6 +151,7 @@ function CreateBookingForm() {
         <Input
           type="date"
           id="endDate"
+          min={startDate || getToday()}
           {...register("endDate", {
             required: "Please select an end date",
           })}
