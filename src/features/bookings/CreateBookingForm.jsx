@@ -12,9 +12,37 @@ import { useGuests } from "../guests/useGuests";
 import { useCabins } from "../cabins/useCabins";
 import { useCreateBooking } from "./useCreateBooking";
 import { getToday } from "../../utils/helpers";
+import styled from "styled-components";
 
-function CreateBookingForm({ onCloseModal }) {
+const GuestField = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+`;
+
+const AddGuestLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  align-self: flex-start;
+
+  font-size: 1.3rem;
+  color: var(--color-brand-600);
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+`;
+
+function CreateBookingForm({ onShowGuestForm }) {
   const { register, handleSubmit, reset, control } = useForm();
+
   const { guests, isLoading: isGuestsLoading } = useGuests();
   const { cabins, isLoading: isCabinsLoading } = useCabins();
   const { createBooking, isCreating } = useCreateBooking();
@@ -77,29 +105,38 @@ function CreateBookingForm({ onCloseModal }) {
     createBooking(newBooking, {
       onSuccess: () => {
         reset();
-        onCloseModal();
       },
     });
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Guest">
-        <SelectGuest
-          id="guestId"
-          {...register("guestId", {
-            required: "Please select a guest",
-          })}
-          disabled={isGuestsLoading || isCreating}
-        >
-          <option value="">Select a guest...</option>
+      <FormRow label="Guest" labelFor="guestId">
+        <GuestField>
+          <SelectGuest
+            id="guestId"
+            {...register("guestId", {
+              required: "Please select a guest",
+            })}
+            disabled={isGuestsLoading || isCreating}
+          >
+            <option value="">Select a guest...</option>
 
-          {guests?.map((guest) => (
-            <option key={guest.id} value={guest.id}>
-              {guest.fullName} — {guest.email}
-            </option>
-          ))}
-        </SelectGuest>
+            {guests?.map((guest) => (
+              <option key={guest.id} value={guest.id}>
+                {guest.fullName} — {guest.email}
+              </option>
+            ))}
+          </SelectGuest>
+
+          <AddGuestLink
+            type="button"
+            onClick={onShowGuestForm}
+            disabled={isCreating}
+          >
+            Add new guest
+          </AddGuestLink>
+        </GuestField>
       </FormRow>
 
       <FormRow label="Cabin">
