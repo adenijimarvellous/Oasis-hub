@@ -73,18 +73,9 @@ function Open({ children, opens: opensWindowName }) {
   return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
-function Window({ children, name, onClose }) {
+function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
-
-  function handleClose() {
-    // If the parent handled the close, don't close the whole modal
-    if (onClose?.()) return;
-
-    // Otherwise, close the modal normally
-    close();
-  }
-
-  const ref = useOutsideClick(handleClose);
+  const ref = useOutsideClick(close);
 
   if (name !== openName) {
     return null;
@@ -93,11 +84,11 @@ function Window({ children, name, onClose }) {
   return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
-        <Button onClick={handleClose}>
+        <Button onClick={close}>
           <HiXMark />
         </Button>
 
-        <div>{children}</div>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
     document.body,

@@ -3,7 +3,7 @@ import supabase from "./supabase";
 export async function getGuests() {
     const { data, error } = await supabase
         .from("guests")
-        .select("id, fullName, email")
+        .select("id, fullName, email, nationality")
         .order("fullName");
 
     if (error) {

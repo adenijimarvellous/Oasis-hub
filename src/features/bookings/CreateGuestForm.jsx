@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
+
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
+
 import { useCreateGuest } from "./useCreateGuest";
+import { getCountryFlag } from "../../utils/countryFlags";
 
 function CreateGuestForm({ onClose, onGuestCreated }) {
   const { register, handleSubmit, reset } = useForm();
@@ -11,10 +14,16 @@ function CreateGuestForm({ onClose, onGuestCreated }) {
   const { createGuest, isCreating } = useCreateGuest();
 
   function onSubmit(data) {
-    createGuest(data, {
+    const newGuest = {
+      ...data,
+      countryFlag: getCountryFlag(data.nationality),
+    };
+
+    createGuest(newGuest, {
       onSuccess: (newGuest) => {
         reset();
         onGuestCreated(newGuest);
+        onClose();
       },
     });
   }
