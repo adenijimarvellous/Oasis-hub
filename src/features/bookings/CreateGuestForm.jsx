@@ -15,7 +15,6 @@ function CreateGuestForm({ onClose, onGuestCreated }) {
       onSuccess: (newGuest) => {
         reset();
         onGuestCreated(newGuest);
-        onClose();
       },
     });
   }

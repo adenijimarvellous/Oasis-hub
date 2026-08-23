@@ -1,5 +1,6 @@
 import { useForm, useWatch } from "react-hook-form";
 import { differenceInCalendarDays } from "date-fns";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import Button from "../../ui/Button";
@@ -7,6 +8,7 @@ import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import SelectGuest from "../../ui/SelectGuest";
+import CreateGuestForm from "./CreateGuestForm";
 
 import { useGuests } from "../guests/useGuests";
 import { useCabins } from "../cabins/useCabins";
@@ -40,8 +42,17 @@ const AddGuestLink = styled.button`
   }
 `;
 
-function CreateBookingForm({ onShowGuestForm }) {
-  const { register, handleSubmit, reset, control } = useForm();
+function CreateBookingForm({ onCloseModal }) {
+  const [showGuestForm, setShowGuestForm] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   const { guests, isLoading: isGuestsLoading } = useGuests();
   const { cabins, isLoading: isCabinsLoading } = useCabins();
@@ -105,13 +116,34 @@ function CreateBookingForm({ onShowGuestForm }) {
     createBooking(newBooking, {
       onSuccess: () => {
         reset();
+        onCloseModal();
       },
     });
   }
 
+  if (showGuestForm) {
+    return (
+      <CreateGuestForm
+        onClose={() => setShowGuestForm(false)}
+        onGuestCreated={(newGuest) => {
+          setValue("guestId", String(newGuest.id), {
+            shouldValidate: true,
+          });
+
+          setShowGuestForm(false);
+        }}
+      />
+    );
+  }
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Guest" labelFor="guestId">
+      <FormRow
+        label="Guest"
+        labelFor="guestId"
+        error={errors?.guestId?.message}
+      >
+        {" "}
         <GuestField>
           <SelectGuest
             id="guestId"
@@ -131,7 +163,7 @@ function CreateBookingForm({ onShowGuestForm }) {
 
           <AddGuestLink
             type="button"
-            onClick={onShowGuestForm}
+            onClick={() => setShowGuestForm(true)}
             disabled={isCreating}
           >
             Add new guest
@@ -139,7 +171,11 @@ function CreateBookingForm({ onShowGuestForm }) {
         </GuestField>
       </FormRow>
 
-      <FormRow label="Cabin">
+      <FormRow
+        label="Cabin"
+        labelFor="cabinId"
+        error={errors?.cabinId?.message}
+      >
         <SelectGuest
           id="cabinId"
           {...register("cabinId", {
@@ -157,7 +193,12 @@ function CreateBookingForm({ onShowGuestForm }) {
         </SelectGuest>
       </FormRow>
 
-      <FormRow label="Number of guests">
+      <FormRow
+        label="Number of guests"
+        labelFor="numGuests"
+        error={errors?.numGuests?.message}
+      >
+        {" "}
         <Input
           type="number"
           id="numGuests"
@@ -172,7 +213,11 @@ function CreateBookingForm({ onShowGuestForm }) {
         />
       </FormRow>
 
-      <FormRow label="Start date">
+      <FormRow
+        label="Start date"
+        labelFor="startDate"
+        error={errors?.startDate?.message}
+      >
         <Input
           type="date"
           id="startDate"
@@ -180,11 +225,15 @@ function CreateBookingForm({ onShowGuestForm }) {
           {...register("startDate", {
             required: "Please select a start date",
           })}
-          disabled={isGuestsLoading}
+          disabled={isCreating || isGuestsLoading}
         />
       </FormRow>
 
-      <FormRow label="End date">
+      <FormRow
+        label="End date"
+        labelFor="endDate"
+        error={errors?.endDate?.message}
+      >
         <Input
           type="date"
           id="endDate"
@@ -201,7 +250,7 @@ function CreateBookingForm({ onShowGuestForm }) {
           type="text"
           id="observations"
           {...register("observations")}
-          disabled={isGuestsLoading}
+          disabled={isCreating || isGuestsLoading}
         />
       </FormRow>
 
