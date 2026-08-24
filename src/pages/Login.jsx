@@ -9,7 +9,7 @@ const LoginLayout = styled.main`
   grid-template-columns: minmax(0, 48rem);
   align-content: center;
   justify-content: center;
-  gap: 3.2rem;
+  gap: 2rem;
   background-color: var(--color-grey-50);
   padding: 2.4rem var(--page-padding-inline);
 `;
@@ -18,7 +18,9 @@ function Login() {
   return (
     <LoginLayout>
       <Logo />
-      <Heading as="h3">Log in to your account</Heading>
+      <Heading as="h2" style={{ textAlign: "center" }}>
+        Log in to your account
+      </Heading>
       <LoginForm />
     </LoginLayout>
   );
