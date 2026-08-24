@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 const StyledSelect = styled.select`
   font-size: 1.4rem;
+  min-height: var(--control-height);
   padding: 0.8rem 1.2rem;
   border: 1px solid
     ${(props) =>
@@ -14,6 +15,7 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 
   width: 100%;
+  min-width: 0;
 `;
 
 function Select({ options, value, onChange, ...props }) {

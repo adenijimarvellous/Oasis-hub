@@ -53,15 +53,23 @@ const Button = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  min-height: var(--control-height);
+  min-width: 0;
 
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
 
   ${(props) => sizes[props.$size]}
   ${(props) => variations[props.$variation]}
+
+  @media (max-width: 30em) {
+    width: 100%;
+    white-space: normal;
+  }
 `;
 
 Button.defaultProps = {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
 import Heading from "../../ui/Heading";
 import {
   Cell,
@@ -11,13 +12,15 @@ import {
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
-  /* Box */
+  /*Box*/
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
 
-  padding: 2.4rem 3.2rem;
+  padding: clamp(2rem, 3vw, 2.4rem) clamp(1.6rem, 3vw, 3.2rem);
+
   grid-column: 3 / span 2;
+  min-width: 0;
 
   & > *:first-child {
     margin-bottom: 1.6rem;
@@ -26,7 +29,30 @@ const ChartBox = styled.div`
   & .recharts-pie-label-text {
     font-weight: 600;
   }
+
+  /* 1024px and below */
+  @media (max-width: 75em) {
+    grid-column: 1 / -1;
+  }
+
+  /* Small screens */
+  @media (max-width: 36em) {
+    padding: 2rem 1.2rem 1.6rem;
+  }
 `;
+// const DesktopLegend = styled(Legend)`
+//   @media (max-width: 36em) {
+//     display: none;
+//   }
+// `;
+
+// const MobileLegend = styled(Legend)`
+//   display: none;
+
+//   @media (max-width: 36em) {
+//     display: block;
+//   }
+// `;
 
 const startDataLight = [
   {
@@ -133,7 +159,7 @@ function prepareData(startData, stays) {
       if ([6, 7].includes(num)) return incArrayValue(arr, "6-7 nights");
       if (num >= 8 && num <= 14) return incArrayValue(arr, "8-14 nights");
       if (num >= 15 && num <= 21) return incArrayValue(arr, "15-21 nights");
-      if (num >= 21) return incArrayValue(arr, "21+ nights");
+      if (num >= 21) return incArrayValue(arr, "22+ nights");
       return arr;
     }, startData)
     .filter((obj) => obj.value > 0);
@@ -141,26 +167,46 @@ function prepareData(startData, stays) {
   return data;
 }
 
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(
+    () => window.matchMedia(query).matches,
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+
+    const handleChange = () => setMatches(mediaQuery.matches);
+
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [query]);
+
+  return matches;
+}
+
 function DurationChart({ filteredStays }) {
   const { isDarkMode } = useDarkMode();
+  const isMobile = useMediaQuery("(max-width: 36em)");
+
   const startData = isDarkMode ? startDataDark : startDataLight;
   const data = prepareData(startData, filteredStays);
 
   return (
     <ChartBox>
       <Heading as="h2">Stay duration summary</Heading>
-      <ResponsiveContainer width="100%" height={240}>
+
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 240}>
         <PieChart>
           <Pie
             data={data}
             nameKey="duration"
             dataKey="value"
-            innerRadius={80}
-            outerRadius={110}
+            innerRadius={isMobile ? 55 : 80}
+            outerRadius={isMobile ? 80 : 110}
             fill="#8884d8"
-            label
+            label={!isMobile}
           >
-            {" "}
             {data.map((entry) => (
               <Cell
                 fill={entry.color}
@@ -169,15 +215,27 @@ function DurationChart({ filteredStays }) {
               />
             ))}
           </Pie>
+
           <Tooltip />
-          <Legend
-            verticalAlign="middle"
-            align="right"
-            width="30%"
-            layout="vertical"
-            iconType="circle"
-            iconSize={12}
-          />
+
+          {isMobile ? (
+            <Legend
+              verticalAlign="bottom"
+              align="center"
+              layout="horizontal"
+              iconType="circle"
+              iconSize={10}
+            />
+          ) : (
+            <Legend
+              verticalAlign="middle"
+              align="right"
+              width="30%"
+              layout="vertical"
+              iconType="circle"
+              iconSize={12}
+            />
+          )}
         </PieChart>
       </ResponsiveContainer>
     </ChartBox>

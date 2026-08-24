@@ -21,7 +21,8 @@ const Box = styled.div`
   background-color: var(--color-grey-0);
   border: 1px solid var(--color-grey-100);
   border-radius: var(--border-radius-md);
-  padding: 2.4rem 4rem;
+  padding: clamp(2rem, 4vw, 2.4rem) clamp(1.6rem, 4vw, 4rem);
+  min-width: 0;
 `;
 
 function CheckinBooking() {

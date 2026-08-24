@@ -7,20 +7,27 @@ const StyledTable = styled.div`
 
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
+  border-radius: var(--border-radius-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
 `;
 
 const CommonRow = styled.div`
   display: grid;
   grid-template-columns: ${(props) => props.$columns};
-  column-gap: 2.4rem;
+  column-gap: clamp(1.2rem, 2vw, 2.4rem);
   align-items: center;
   transition: none;
+  min-width: 80rem;
+
+  & > * {
+    min-width: 0;
+  }
 `;
 
 const StyledHeader = styled(CommonRow)`
-  padding: 1.6rem 2.4rem;
+  padding: 1.6rem clamp(1.6rem, 2vw, 2.4rem);
 
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
@@ -31,7 +38,7 @@ const StyledHeader = styled(CommonRow)`
 `;
 
 const StyledRow = styled(CommonRow)`
-  padding: 1.2rem 2.4rem;
+  padding: 1.2rem clamp(1.6rem, 2vw, 2.4rem);
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);

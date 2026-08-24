@@ -9,6 +9,11 @@ const StyledFormRow = styled.div`
   gap: ${(props) => (props.orientation === "vertical" ? "0.8rem" : "2.4rem")};
 
   padding: 1.2rem 0;
+  min-width: 0;
+
+  & > * {
+    min-width: 0;
+  }
 
   &:first-child {
     padding-top: 0;
@@ -23,21 +28,37 @@ const StyledFormRow = styled.div`
     props.orientation === "vertical"
       ? "none"
       : "1px solid var(--color-grey-100)"};
-  }
+  } */
 
   ${(props) =>
+    !props.$hasLabel &&
     props.orientation !== "vertical" &&
     css`
       &:has(button) {
         display: flex;
         justify-content: flex-end;
+        flex-wrap: wrap;
         gap: 1.2rem;
       }
-    `} */
+    `}
+
+  @media (max-width: 48em) {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    gap: 0.8rem;
+
+    &:has(button) {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 1.2rem;
+    }
+  }
 `;
 
 const Label = styled.label`
   font-weight: 500;
+  color: var(--color-grey-700);
 `;
 
 const Error = styled.span`
@@ -49,7 +70,7 @@ function FormRow({ label, error, children, orientation, labelFor }) {
   const id = labelFor || children.props?.id;
 
   return (
-    <StyledFormRow orientation={orientation}>
+    <StyledFormRow orientation={orientation} $hasLabel={Boolean(label)}>
       {label && <Label htmlFor={id}>{label}</Label>}
       {children}
       {error && <Error>{error}</Error>}
