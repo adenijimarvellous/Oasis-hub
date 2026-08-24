@@ -9,14 +9,14 @@ const Heading = styled.h1`
   ${(props) =>
     props.as === "h1" &&
     css`
-      font-size: 3rem;
+      font-size: clamp(2.4rem, 4vw, 3rem);
       font-weight: 600;
     `}
 
   ${(props) =>
     props.as === "h2" &&
     css`
-      font-size: 2rem;
+      font-size: clamp(1.8rem, 3vw, 2rem);
       font-weight: 600;
     `}
     

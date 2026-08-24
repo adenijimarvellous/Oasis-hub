@@ -31,10 +31,13 @@ const StyledToggle = styled.button`
 
 const StyledList = styled.ul`
   position: fixed;
+  z-index: 1001;
 
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
+  min-width: 18rem;
+  overflow: hidden;
 
   right: ${(props) => props.position.x}px;
   top: ${(props) => props.position.y}px;
@@ -52,6 +55,8 @@ const StyledButton = styled.button`
   display: flex;
   align-items: center;
   gap: 1.6rem;
+  min-height: var(--control-height);
+  white-space: nowrap;
 
   &:hover {
     background-color: var(--color-grey-50);

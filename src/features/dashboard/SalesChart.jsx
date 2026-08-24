@@ -15,6 +15,7 @@ import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
+  overflow-x: auto;
 
   /* Hack to change grid line colors */
   & .recharts-cartesian-grid-horizontal line,
@@ -64,15 +65,14 @@ function SalesChart({ bookings, numDays }) {
   });
 
   const data = allDates.map((date) => {
+    const dayBookings = bookings.filter((booking) =>
+      isSameDay(date, new Date(booking.created_at)),
+    );
+
     return {
       label: format(date, "MMM dd"),
-      totalSales: bookings
-        .filter((booking) => isSameDay(date, new Date(booking.created_at)))
-        .reduce((acc, cur) => acc + cur.totalPrice, 0),
-
-      extrasSales: bookings
-        .filter((booking) => isSameDay(date, new Date(booking.created_at)))
-        .reduce((acc, cur) => acc + cur.extrasPrice, 0),
+      totalSales: dayBookings.reduce((acc, cur) => acc + cur.totalPrice, 0),
+      extrasSales: dayBookings.reduce((acc, cur) => acc + cur.extrasPrice, 0),
     };
   });
 
@@ -94,7 +94,7 @@ function SalesChart({ bookings, numDays }) {
     <StyledSalesChart>
       <Heading as="h2">
         Sales from {format(allDates.at(0), "MMM dd yyyy")} &mdash;{" "}
-        {format(allDates.at(-1), "MMM dd yyyy")}{" "}
+        {format(allDates.at(-1), "MMM dd yyyy")}
       </Heading>
 
       <ResponsiveContainer height={300} width="100%">
@@ -104,13 +104,19 @@ function SalesChart({ bookings, numDays }) {
             tick={{ fill: colors.text }}
             tickLine={{ stroke: colors.text }}
           />
+
           <YAxis
-            unit=" #"
             tick={{ fill: colors.text }}
             tickLine={{ stroke: colors.text }}
+            tickFormatter={(value) => `NGN ${value / 1000}k`}
           />
+
           <CartesianGrid strokeDasharray="4" />
-          <Tooltip contentStyle={{ backgroundColor: colors.background }} />
+
+          <Tooltip
+            contentStyle={{ backgroundColor: colors.background }}
+            formatter={(value) => [`NGN ${value.toLocaleString()}`]}
+          />
 
           <Area
             dataKey="totalSales"
@@ -119,7 +125,6 @@ function SalesChart({ bookings, numDays }) {
             fill={colors.totalSales.fill}
             strokeWidth={2}
             name="Total Sales"
-            unit=" #"
           />
 
           <Area
@@ -129,7 +134,6 @@ function SalesChart({ bookings, numDays }) {
             fill={colors.extrasSales.fill}
             strokeWidth={2}
             name="Extras Sales"
-            unit=" #"
           />
         </AreaChart>
       </ResponsiveContainer>

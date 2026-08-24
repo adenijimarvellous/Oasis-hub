@@ -3,7 +3,7 @@ import Button from "./Button";
 import Heading from "./Heading";
 
 const StyledConfirmDelete = styled.div`
-  width: 40rem;
+  width: min(40rem, 100%);
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -16,6 +16,7 @@ const StyledConfirmDelete = styled.div`
   & div {
     display: flex;
     justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 1.2rem;
   }
 `;
@@ -31,7 +32,6 @@ function ConfirmDelete({ resourceName, onConfirm, disabled, oncloseModal }) {
 
       <div>
         <Button
-          $variation="secondary"
           disabled={disabled}
           $variation="secondary"
           $size="medium"
@@ -40,7 +40,6 @@ function ConfirmDelete({ resourceName, onConfirm, disabled, oncloseModal }) {
           Cancel
         </Button>
         <Button
-          $variation="danger"
           disabled={disabled}
           $variation="danger"
           $size="medium"

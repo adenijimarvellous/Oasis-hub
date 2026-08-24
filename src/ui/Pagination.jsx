@@ -8,6 +8,8 @@ const StyledPagination = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.2rem;
+  flex-wrap: wrap;
 `;
 
 const P = styled.p`
@@ -22,6 +24,7 @@ const P = styled.p`
 const Buttons = styled.div`
   display: flex;
   gap: 0.6rem;
+  flex-wrap: wrap;
 `;
 
 const PaginationButton = styled.button`
@@ -37,6 +40,7 @@ const PaginationButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  min-height: var(--control-height);
   padding: 0.6rem 1.2rem;
   transition: all 0.3s;
 

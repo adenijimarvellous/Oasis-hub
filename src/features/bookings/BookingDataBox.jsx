@@ -23,13 +23,21 @@ const StyledBookingDataBox = styled.section`
 
 const Header = styled.header`
   background-color: var(--color-brand-500);
-  padding: 2rem 4rem;
+  padding: clamp(1.6rem, 3vw, 2rem) clamp(1.6rem, 4vw, 4rem);
   color: #e0e7ff;
   font-size: 1.8rem;
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.6rem;
+  min-width: 0;
+
+  @media (max-width: 48em) {
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 1.5rem;
+  }
 
   svg {
     height: 3.2rem;
@@ -42,6 +50,11 @@ const Header = styled.header`
     gap: 1.6rem;
     font-weight: 600;
     font-size: 1.8rem;
+    min-width: 0;
+
+    @media (max-width: 48em) {
+      font-size: 1.6rem;
+    }
   }
 
   & span {
@@ -52,12 +65,13 @@ const Header = styled.header`
 `;
 
 const Section = styled.section`
-  padding: 3.2rem 4rem 1.2rem;
+  padding: clamp(2rem, 4vw, 3.2rem) clamp(1.6rem, 4vw, 4rem) 1.2rem;
 `;
 
 const Guest = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1.2rem;
   margin-bottom: 1.6rem;
   color: var(--color-grey-500);
@@ -72,14 +86,16 @@ const Price = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.6rem;
+  flex-wrap: wrap;
   padding: 1.6rem 3.2rem;
   border-radius: var(--border-radius-sm);
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    props.$isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+    props.$isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
   & p:last-child {
     text-transform: uppercase;
@@ -92,10 +108,14 @@ const Price = styled.div`
     width: 2.4rem;
     color: currentColor !important;
   }
+
+  @media (max-width: 48em) {
+    padding: 1.6rem;
+  }
 `;
 
 const Footer = styled.footer`
-  padding: 1.6rem 4rem;
+  padding: 1.6rem clamp(1.6rem, 4vw, 4rem);
   font-size: 1.2rem;
   color: var(--color-grey-500);
   text-align: right;

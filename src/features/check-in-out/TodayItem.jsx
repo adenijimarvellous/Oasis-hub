@@ -7,7 +7,7 @@ import CheckoutButton from "./CheckoutButton";
 
 const StyledTodayItem = styled.li`
   display: grid;
-  grid-template-columns: 9rem 2rem 1fr 7rem 9rem;
+  grid-template-columns: 9rem 2rem minmax(12rem, 1fr) 7rem 9rem;
   gap: 1.2rem;
   align-items: center;
 
@@ -18,10 +18,21 @@ const StyledTodayItem = styled.li`
   &:first-child {
     border-top: 1px solid var(--color-grey-100);
   }
+
+  @media (max-width: 36em) {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+
+    & > :first-child,
+    & > :last-child {
+      justify-self: start;
+    }
+  }
 `;
 
 const Guest = styled.div`
   font-weight: 500;
+  min-width: 0;
 `;
 
 function TodayItem({ activity }) {

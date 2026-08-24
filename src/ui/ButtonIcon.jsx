@@ -6,6 +6,11 @@ const ButtonIcon = styled.button`
   padding: 0.6rem;
   border-radius: var(--border-radius-sm);
   transition: all 0.2s;
+  min-width: var(--control-height);
+  min-height: var(--control-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: var(--color-grey-100);

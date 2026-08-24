@@ -4,7 +4,7 @@ const Form = styled.form`
   ${({ $type }) =>
     $type !== "regular" &&
     css`
-      padding: 2.4rem 4rem;
+      padding: clamp(2rem, 4vw, 2.4rem) clamp(1.6rem, 4vw, 4rem);
 
       background-color: var(--color-grey-0);
       border: 1px solid var(--color-grey-100);
@@ -14,15 +14,17 @@ const Form = styled.form`
   ${({ $type }) =>
     $type === "modal" &&
     css`
-      width: 80rem;
+      width: min(80rem, calc(100vw - 3.2rem));
     `}
 
-  overflow: hidden;
+  overflow: visible;
   font-size: 1.4rem;
+  max-width: 100%;
+  min-width: 0;
 `;
 
 Form.defaultProps = {
-  type: "regular",
+  $type: "regular",
 };
 
 export default Form;

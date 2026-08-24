@@ -96,6 +96,11 @@ const GlobalStyle = createGlobalStyle`
   --border-radius-md: 7px;
   --border-radius-lg: 9px;
 
+  --page-padding-inline: clamp(1.6rem, 4vw, 4.8rem);
+  --page-padding-block: clamp(2.4rem, 4vw, 4rem);
+  --content-max-width: 120rem;
+  --control-height: 4.2rem;
+
 
 }
 
@@ -114,6 +119,12 @@ html {
   font-size: 62.5%;
 }
 
+html,
+body,
+#root {
+  min-width: 0;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   color: var(--color-grey-700);
@@ -122,6 +133,7 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   font-size: 1.6rem;
+  overflow-x: hidden;
 }
 
 input,
@@ -130,6 +142,7 @@ textarea,
 select {
   font: inherit;
   color: inherit;
+  min-width: 0;
 }
 
 button {
@@ -181,9 +194,16 @@ h6 {
 
 img {
   max-width: 100%;
+  height: auto;
 
   /* For dark mode */
   filter: grayscale(var(--image-grayscale)) opacity(var(--image-opacity));
+}
+
+@media (max-width: 48em) {
+  html {
+    font-size: 56.25%;
+  }
 }
 
 /* Scrollbar */
