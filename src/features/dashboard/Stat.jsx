@@ -18,13 +18,24 @@ const StyledStat = styled.div`
   & > * {
     min-width: 0;
   }
+
+  @media (max-width: 75em) {
+    padding: 1.2rem;
+    column-gap: 0.8rem;
+  }
+
+  @media (max-width: 36em) {
+    padding: 1rem;
+    column-gap: 0.7rem;
+  }
 `;
 
 const Icon = styled.div`
   grid-row: 1 / -1;
-  width: clamp(4rem, 6.5vw, 5.5rem);
+  width: clamp(3.5rem, 6.5vw, 5.5rem);
   aspect-ratio: 1;
   border-radius: 50%;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,15 +44,15 @@ const Icon = styled.div`
   background-color: var(--color-${(props) => props.color}-100);
 
   & svg {
-    width: 3rem;
-    height: 3rem;
+    width: clamp(2rem, 4vw, 3rem);
+    height: clamp(2rem, 4vw, 3rem);
     color: var(--color-${(props) => props.color}-700);
   }
 `;
 
 const Title = styled.h5`
   align-self: end;
-  font-size: 1rem;
+  font-size: clamp(0.8rem, 1vw, 1rem);
   text-transform: uppercase;
   letter-spacing: 0.3px;
   font-weight: 500;
@@ -49,14 +60,11 @@ const Title = styled.h5`
 `;
 
 const Value = styled.p`
-  font-size: clamp(2rem, 2.5vw, 2rem);
-  line-height: 1;
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.2;
   font-weight: 500;
-  white-space: nowrap;
-
-  @media (max-width: 36em) {
-    font-size: 2rem;
-  }
+  min-width: 0;
+  overflow-wrap: anywhere;
 `;
 
 function Stat({ icon, title, value, color }) {
