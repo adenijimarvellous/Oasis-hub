@@ -13,19 +13,16 @@ const StyledDashboardLayout = styled.div`
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: auto auto auto;
   gap: clamp(1.6rem, 2vw, 2.4rem);
+
   min-width: 0;
 
   & > * {
     min-width: 0;
   }
 
-  @media (max-width: 75em) {
+  @media (max-width: 85em) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  /* @media (max-width: 60em) {
-    grid-template-columns: 1fr;
-  } */
 
   @media (max-width: 36em) {
     grid-template-columns: 1fr;
