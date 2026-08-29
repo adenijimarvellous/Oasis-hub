@@ -12,7 +12,7 @@ const StyledDashboardLayout = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: auto auto auto;
-  gap: 2.4rem;
+  gap: clamp(1.6rem, 2vw, 2.4rem);
   min-width: 0;
 
   & > * {
