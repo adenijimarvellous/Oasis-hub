@@ -27,7 +27,7 @@ const StyledToday = styled.div`
 
 const TodayList = styled.ul`
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
 
   /* Removing scrollbars for webkit, firefox, and ms, respectively */
   &::-webkit-scrollbar {

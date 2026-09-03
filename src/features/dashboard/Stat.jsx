@@ -64,7 +64,9 @@ const Value = styled.p`
   line-height: 1.2;
   font-weight: 500;
   min-width: 0;
-  overflow-wrap: anywhere;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 function Stat({ icon, title, value, color }) {

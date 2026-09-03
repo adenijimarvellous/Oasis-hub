@@ -7,8 +7,8 @@ import CheckoutButton from "./CheckoutButton";
 
 const StyledTodayItem = styled.li`
   display: grid;
-  grid-template-columns: 9rem 2rem minmax(12rem, 1fr) 7rem 9rem;
-  gap: 1.2rem;
+  grid-template-columns: auto 2rem minmax(10rem, 1fr) 6rem auto;
+  gap: 1rem;
   align-items: center;
 
   font-size: 1.4rem;
